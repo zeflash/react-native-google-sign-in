@@ -62,7 +62,7 @@ const GoogleSignIn = {
       refreshToken,
       idToken,
       idTokenExpirationDate,
-      accessibleScopes,
+      // accessibleScopes,
       hostedDomain,
       serverAuthCode,
     } = user;
@@ -82,7 +82,7 @@ const GoogleSignIn = {
       refreshToken,
       idToken,
       idTokenExpirationDate,
-      accessibleScopes,
+      // accessibleScopes,
       // hostedDomain,
       serverAuthCode,
     };

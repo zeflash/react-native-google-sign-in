@@ -322,7 +322,7 @@ public class RNGoogleSignInModule extends ReactContextBaseJavaModule implements 
                 scopes.pushString(scopeString);
                 // }
             }
-            params.putArray("grantedScopes", scopes);
+            //params.putArray("grantedScopes", scopes);
 
             params.putString("id", acct.getId());
             params.putString("idToken", acct.getIdToken());

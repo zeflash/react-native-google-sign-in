@@ -65,7 +65,7 @@ const GoogleSignIn = {
       email,
       familyName,
       givenName,
-      grantedScopes,
+      // grantedScopes,
       id,
       idToken,
       photoUrl,
@@ -82,7 +82,7 @@ const GoogleSignIn = {
       photoUrlTiny: photoUrl,
       accessToken,
       idToken,
-      accessibleScopes: grantedScopes,
+      // accessibleScopes: grantedScopes,
       serverAuthCode,
     };
   },
