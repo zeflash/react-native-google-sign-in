@@ -42,7 +42,7 @@ const GoogleSignIn = {
         offError();
         reject(error);
       });
-      RNGoogleSignIn.signIn();
+      setTimeout(() => RNGoogleSignIn.signIn(), 0);
     });
   },
 
@@ -114,7 +114,7 @@ const GoogleSignIn = {
         offError();
         reject(error);
       });
-      RNGoogleSignIn.signInSilently();
+      setTimeout(() => RNGoogleSignIn.signInSilently(), 0);
     });
   },
 
