@@ -186,7 +186,12 @@ public class RNGoogleSignInModule extends ReactContextBaseJavaModule implements 
     public void onActivityResult(Activity activity, final int requestCode, final int resultCode, final Intent intent) {
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent);
-            handleSignInResult(result);
+            // A workaround to prevent a crash and the bug of google sign in api which gives an error for the second attempt to sign in
+            if (result == null) {
+                signIn();
+            } else {
+                handleSignInResult(result);
+            }
         }
     }
 
