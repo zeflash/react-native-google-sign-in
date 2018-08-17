@@ -43,6 +43,7 @@ import java.util.Map;
 
 public class RNGoogleSignInModule extends ReactContextBaseJavaModule implements ActivityEventListener, LifecycleEventListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final int RC_SIGN_IN = 9001;
+    private static final int RC_SIGN_IN_RETRY = 9002;
     private static final int ERROR_CODE_NULL_API_CLIENT = 20001;
     private static final String ERROR_MESSAGE_NULL_API_CLIENT = "Must call configure first";
     private static final int ERROR_CODE_NOT_CONNECTED_API_CLIENT = 20002;
@@ -184,11 +185,12 @@ public class RNGoogleSignInModule extends ReactContextBaseJavaModule implements 
 
     @Override
     public void onActivityResult(Activity activity, final int requestCode, final int resultCode, final Intent intent) {
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == RC_SIGN_IN || requestCode == RC_SIGN_IN_RETRY) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent);
-            // A workaround to prevent a crash and the bug of google sign in api which gives an error for the second attempt to sign in
             if (result == null) {
-                signIn();
+                sendError("RNGoogleSignInError", 12501, "");
+            } else if (result.getStatus().getStatusCode() == 12502 /* sign in in progress */ && requestCode == RC_SIGN_IN /* prevent infinite roof */) {
+                retrySigningIn();
             } else {
                 handleSignInResult(result);
             }
@@ -282,6 +284,16 @@ public class RNGoogleSignInModule extends ReactContextBaseJavaModule implements 
                 }
             });
         }
+    }
+
+    private void retrySigningIn() {
+        log("signIn");
+        if (mGoogleApiClient == null) {
+            sendError("RNGoogleSignInError", ERROR_CODE_NULL_API_CLIENT, ERROR_MESSAGE_NULL_API_CLIENT);
+            return;
+        }
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        getCurrentActivity().startActivityForResult(signInIntent, RC_SIGN_IN_RETRY);
     }
 
     @ReactMethod
